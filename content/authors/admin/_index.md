@@ -1,6 +1,6 @@
 ---
 # Display name
-name: Nelson Bighetti
+name: Sancho Sequeira
 
 # Username (this should match the folder name)
 authors:
@@ -10,12 +10,12 @@ authors:
 superuser: true
 
 # Role/position
-role: Professor of Artificial Intelligence
+role: Senior Research Analyst
 
 # Organizations/Affiliations
 organizations:
-- name: Stanford University
-  url: ""
+- name: Council for the Advancement and Support of Education
+  url: https://www.case.org/
 
 # Short bio (displayed in user profile at end of posts)
 bio: My research interests include distributed robotics, mobile computing and programmable matter.
