@@ -18,24 +18,24 @@ organizations:
   url: https://www.case.org/
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include distributed robotics, mobile computing and programmable matter.
+bio: I am interested in data wrangling, statistics, automating workflows, and data visualization using R.
 
 interests:
-- Artificial Intelligence
-- Computational Linguistics
-- Information Retrieval
+- R programming
+- Data Visualization
+- Educational Research
 
 education:
   courses:
-  - course: PhD in Artificial Intelligence
-    institution: Stanford University
-    year: 2012
-  - course: MEng in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2009
-  - course: BSc in Artificial Intelligence
-    institution: Massachusetts Institute of Technology
-    year: 2008
+  - course: Psychological Sciences (MA)
+    institution: James Madison University
+    year: 2015
+  - course: Psychology (BS)
+    institution: James Madison University
+    year: 2013
+  - course: Communications (BS)
+    institution: James Madison University
+    year: 2013
 
 # Social/Academic Networking
 # For available icons, see: https://sourcethemes.com/academic/docs/page-builder/#icons
