@@ -65,11 +65,9 @@ email: ""
 
 # Organizational groups that you belong to (for People widget)
 #   Set this to `[]` or comment out if you are not using People widget.
-user_groups:
-- Researchers
-- Visitors
----
+#user_groups:
+#- Researchers
+#- Visitors
+#---
 
-Nelson Bighetti is a professor of artificial intelligence at the Stanford AI Lab. His research interests include distributed robotics, mobile computing and programmable matter. He leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+Hi this is Sancho! I am currently a Senior Research Analyst at the Council for the Advancement and Support of Education. I am primarily interested in data analysis and visualization using R. In my professional life I have focused on educational research. The primary purpose of this blog is to conduct analyses and visualizations that are accessible to everyone for fun. Opinions expressed are solely my own and do not express the views or opinions of my employer. 
