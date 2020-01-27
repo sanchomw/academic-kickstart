@@ -68,6 +68,6 @@ email: ""
 #user_groups:
 #- Researchers
 #- Visitors
-#---
+---
 
 Hi this is Sancho! I am currently a Senior Research Analyst at the Council for the Advancement and Support of Education. I am primarily interested in data analysis and visualization using R. In my professional life I have focused on educational research. The primary purpose of this blog is to conduct analyses and visualizations that are accessible to everyone for fun. Opinions expressed are solely my own and do not express the views or opinions of my employer. 
