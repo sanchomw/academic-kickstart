@@ -39,5 +39,6 @@ date_format = "Jan 2006"
 #  company_url = https://www.windwalker.com/
   location = "Tysons Corner, VA"
   date_start = "2015-10-01"
-  date_end = "2016-11-31"
+  date_end = "2016-11-30"
+  
 +++
