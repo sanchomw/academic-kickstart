@@ -20,7 +20,7 @@ date_format = "Jan 2006"
 [[experience]]
   title = "Senior Research Analyst"
   company = "Council for Advancement and Support of Education"
-  company_url = "https://www.case.org/"
+  company_url = https://www.case.org/
   location = "Washington DC"
   date_start = "2018-05-01"
   date_end = ""
@@ -35,7 +35,7 @@ date_format = "Jan 2006"
 [[experience]]
   title = "Research Data Analyst"
   company = "Discovery Education"
-  company_url = "https://www.discoveryeducation.com/"
+  company_url = https://www.discoveryeducation.com/
   location = "Silver Spring, MD"
   date_start = "2016-12-01"
   date_end = "2018-04-30"
@@ -44,7 +44,7 @@ date_format = "Jan 2006"
 [[experience]]
   title = "Research Assistant"
   company = "Windwalker Corporation"
-  company_url = "https://www.windwalker.com/"
+  company_url = https://www.windwalker.com/
   location = "Tysons Corner, VA"
   date_start = "2015-10-01"
   date_end = "2016-11-31"
