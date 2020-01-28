@@ -20,7 +20,7 @@ date_format = "Jan 2006"
 [[experience]]
   title = "Senior Research Analyst"
   company = "Council for Advancement and Support of Education"
-  company_url = "https://www.case.org/""
+  company_url = "https://www.case.org/"
   location = "Washington DC"
   date_start = "2018-05-01"
   date_end = ""
