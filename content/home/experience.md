@@ -24,13 +24,6 @@ date_format = "Jan 2006"
   location = "Washington DC"
   date_start = "2018-05-01"
   date_end = ""
-#  description = """
-#  Responsibilities include:
-#  
-#  * Analysing
-#  * Modelling
-#  * Deploying
-#  """
 
 [[experience]]
   title = "Research Data Analyst"
@@ -39,7 +32,6 @@ date_format = "Jan 2006"
   location = "Silver Spring, MD"
   date_start = "2016-12-01"
   date_end = "2018-04-30"
-#  description = """Taught electronic engineering and researched semiconductor physics."""
 
 [[experience]]
   title = "Research Assistant"
@@ -48,6 +40,4 @@ date_format = "Jan 2006"
   location = "Tysons Corner, VA"
   date_start = "2015-10-01"
   date_end = "2016-11-31"
-
-
 +++
