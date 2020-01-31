@@ -22,7 +22,7 @@ projects: []
 
 I was disappointed to find that coronaviruses have nothing to do with the beer, but instead refer to their appearance. The word "corona" is latin for "crown or garland", which is how coronaviruses appear under microscopes. However, this does explain why the corona logo has a crown on top of it. Visually, it is more similar to the sun's corona, which is the outer part of the sun's atmosphere. 
 
-According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) these 7 coronaviruses are: 
+According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) the 7 coronaviruses are: 
 
 * 229E
 * OC43
@@ -32,6 +32,53 @@ According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) these 
 * SARS-CoV
 * 2019 Novel Coronavirus
 
-The first human  coronaviruses (229E and OC43) were first discovered in the late 1960s [(Geller, Varbanov, and Duval, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509683/). It wasn't until the 2003 SARS outbreak that the next one (SARS-CoV) was found. This was followed by NL63 in 2004, and then HKU1 in 2005. Virologists decided to take a break for 7 years due to all the winning, and only discovered the next one (MERS-CoV) due to the MERS outbreak in 2012. That brings us to the current outbreak of Wuhan Virus when the 7th coronavirus (2019 Novel Coronavirus) was discovered. I know "2019 Novel Coronavirus" doesn't have a great ring to it, but MERS-CoV was actually called "Novel Coronavirus 2012" before it was properly named. 
+The first human  coronaviruses (229E and OC43) were first discovered in the late 1960s [(Geller, Varbanov, and Duval, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509683/). It wasn't until the 2003 SARS outbreak that the next one (SARS-CoV) was found. This was followed by NL63 in 2004, and then HKU1 in 2005. Virologists decided to take a break for 7 years, and only discovered the next one (MERS-CoV) due to the MERS outbreak in 2012. That brings us to the current outbreak of Wuhan Virus when the 7th coronavirus (2019 Novel Coronavirus) was discovered. I know "2019 Novel Coronavirus" doesn't have a great ring to it, but MERS-CoV was actually called "Novel Coronavirus 2012" before it got a final name. 
+
+
+```r
+#load the libraries
+library(ggplot2)
+library(tidyverse)
+library(scales)
+library(ggrepel)
+
+#make a vector of years
+Year <- c(1965, 2003, 2004, 2005, 2012, 2019)
+
+#make a dummy variable for plotting
+dummy <- c(1,1,1,1,1,1)
+
+#make a vector of viruses
+Virus <- c("229E &\nOC43", "SARS-CoV", "NL63", "HKU1", "MERS-CoV", "2019 Novel\nCoronavirus")
+
+#combine the vectors and make a df
+temp.df <- as.data.frame(cbind(Year, Virus, dummy))
+
+#convert year to date
+temp.df <- temp.df %>%
+  mutate(Year = as.Date(ISOdate(as.numeric(as.character(Year)), 1, 1)))
+
+#plot it 
+ggplot(temp.df, aes(x = Year, y = dummy, label = Virus)) +
+  geom_point(size = 4) +
+  geom_segment(aes(xend = Year, y = 0, yend = dummy)) +
+  geom_label_repel(aes(y = 1.2), angle = 90) +
+  labs(title = "Coronavirus Discovery by Year") +
+  scale_x_date(labels = date_format("%Y"))+
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        plot.background = element_blank(), plot.title = element_text(hjust = 0.5),
+        text = element_text(size = 12),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        panel.background = element_blank(),
+        legend.position="bottom",
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
 
 The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold. 
+
+
+
