@@ -22,12 +22,12 @@ projects: []
 
 As I was doing research for this post I was surprised to find there are only 7 human coronaviruses. According to the CDC (2020) these are: 
 
-* 229E
-* NL63
-* OC43
-* HKU1
-* MERS-CoV
-* SARS-CoV
-* 2019 Novel Coronavirus
+*229E
+*NL63
+*OC43
+*HKU1
+*MERS-CoV
+*SARS-CoV
+*2019 Novel Coronavirus
 
 The first three (229E, NL63, and OC43) are often associated with the common cold. 
