@@ -42,10 +42,13 @@ The first human  coronaviruses (229E and OC43) were first discovered in the late
 ```{r message = FALSE, warning = FALSE, echo = FALSE, include = TRUE}
 
 #load the libraries
+library(blogdown)
 library(ggplot2)
 library(tidyverse)
 library(scales)
 library(ggrepel)
+#library(plotly)
+#library(widgetframe)
 
 #make a vector of years
 Year <- c(1965, 2003, 2004, 2005, 2012, 2019)
@@ -79,7 +82,7 @@ plot <- ggplot(temp.df, aes(x = Year, y = dummy, label = Virus)) +
         legend.position="bottom",
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
-  
+
 plot
 
 ```
