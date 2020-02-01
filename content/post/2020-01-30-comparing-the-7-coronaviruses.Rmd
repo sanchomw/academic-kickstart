@@ -16,11 +16,7 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
-output:
-  blogdown::html_page:
-    toc: true
-    fig_width: 6
-    dev: "svg"
+
 ---
 
 ## Intro to Coronaviruses
@@ -39,7 +35,7 @@ According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) the 7 
 
 The first human  coronaviruses (229E and OC43) were first discovered in the late 1960s [(Geller, Varbanov, and Duval, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509683/). It wasn't until the 2003 SARS outbreak that the next one (SARS-CoV) was found. This was followed by NL63 in 2004, and then HKU1 in 2005. Virologists decided to take a break for 7 years, and only discovered the next one (MERS-CoV) due to the MERS outbreak in 2012. That brings us to the current outbreak of Wuhan Virus when the 7th coronavirus (2019 Novel Coronavirus) was discovered. I know "2019 Novel Coronavirus" doesn't have a great ring to it, but MERS-CoV was actually called "Novel Coronavirus 2012" before it got a final name. 
 
-```{r message = FALSE, warning = FALSE, echo = FALSE, include = TRUE}
+```{r message = FALSE, warning = FALSE, echo = FALSE, include = FALSE}
 
 #load the libraries
 library(blogdown)
@@ -55,7 +51,6 @@ Year <- c(1965, 2003, 2004, 2005, 2012, 2019)
 
 #make a dummy variable for plotting
 dummy <- c(1,1,1,1,1,1)
-
 #make a vector of viruses
 Virus <- c("229E &\nOC43", "SARS-CoV", "NL63", "HKU1", "MERS-CoV", "2019 Novel\nCoronavirus")
 
@@ -70,7 +65,7 @@ temp.df <- temp.df %>%
 ggplot(temp.df, aes(x = Year, y = dummy, label = Virus)) +
   geom_point(size = 4) +
   geom_segment(aes(xend = Year, y = 0, yend = dummy)) +
-  geom_label_repel(aes(y = 1.2), angle = 90) +
+  geom_label_repel(aes(y = 1.2)) +
   labs(title = "Coronavirus Discovery by Year") +
   scale_x_date(labels = date_format("%Y"))+
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
