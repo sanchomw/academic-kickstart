@@ -18,7 +18,6 @@ image:
 projects: []
 output:
   blogdown::html_page:
-    number_sections: yes
     toc: yes
 ---
 
@@ -67,18 +66,18 @@ dummy <- c(1,1,1,1,1,1)
 Virus <- c("229E &\nOC43", "SARS-CoV", "NL63", "HKU1", "MERS-CoV", "2019 Novel\nCoronavirus")
 
 #combine the vectors and make a df
-temp.df <- as.data.frame(cbind(Year, Virus, dummy))
+virus.year <- as.data.frame(cbind(Year, Virus, dummy))
 
-#convert year to date
-virus.year <- temp.df %>%
-  mutate(Year = as.Date(ISOdate(as.numeric(as.character(Year)), 1, 1)))
+#convert year to numeric
+virus.year <- virus.year %>%
+  mutate(Year = as.numeric(as.character(Year)), 1, 1)
 
 #clean it up
-rm(Year, dummy, Virus, temp.df)
+rm(Year, dummy, Virus)
 
 ```
 
-```{r cache = TRUE, echo = FALSE}
+```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
 #plot it 
 plot1 <- ggplot(virus.year, aes(x = Year, y = dummy, label = Virus)) +
@@ -86,7 +85,8 @@ plot1 <- ggplot(virus.year, aes(x = Year, y = dummy, label = Virus)) +
   geom_segment(aes(xend = Year, y = 0, yend = dummy)) +
   geom_label(aes(y = 1.2)) +
   labs(title = "Coronavirus Discovery by Year") +
-  scale_x_date(labels = date_format("%Y"))+
+  #scale_x_date(labels = date_format("%Y"))+
+  scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 5))+
   theme(panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
         plot.background = element_blank(), plot.title = element_text(hjust = 0.5),
@@ -103,7 +103,7 @@ plot1 <- ggplotly(plot1, tooltip = c("label", "x"))
 
 ```
 
-```{r out.width = '100%'}
+```{r out.width = '100%', message = FALSE, echo = FALSE}
 
 plot1 %>%
   frameWidget(width = "100%", height = "100%")
