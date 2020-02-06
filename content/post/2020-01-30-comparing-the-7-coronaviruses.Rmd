@@ -28,6 +28,7 @@ rmarkdown::render("index.Rmd")
 
 # Intro to Coronaviruses
 
+## History
 I was disappointed to find that coronaviruses have nothing to do with the beer, but instead refer to their appearance. The word "corona" is latin for "crown or garland", which is how coronaviruses appear under microscopes. However, this does explain why the corona logo has a crown on top of it. Visually, it is more similar to the sun's corona, which is the outer part of the sun's atmosphere. 
 
 According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) the 7 coronaviruses are: 
@@ -110,7 +111,18 @@ plot1 %>%
 
 ```
 
-The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold. 
+
+##The Common Coronaviruses
+The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold [CDC (2020)](https://www.cdc.gov/coronavirus/types.html), but can lead to more severe complications. Much like the cold, infections are much more common during the winter months and cases drop to almost none during the summer [Gaunt, Hardie, Claas, Simmonds, & Templeton, 2010](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf). [Guant et. al](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf) tested 11,661 sick people between 2006 and 2009 and found 267 (2.3%) tested positive for at least one of the four corona viruses.
+
+##The Outbreak Coronaviruses
+The other three (MERS-CoV, SARS-CoV, and 2019-nCoV) are much more unique. They represent examples of new viruses that emerge after "jumping" from animals to humans. These viruses are known to infect animals, but a random mutation allows them to suddenly start infecting humans. An outbreak occurs when those people are then able to infect other people. 
+
+
+
+
+
+
 
 
 
