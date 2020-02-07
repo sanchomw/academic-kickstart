@@ -119,7 +119,7 @@ The first four (229E, NL63, OC43, and HKU1) are often associated with the common
 The other three (MERS-CoV, SARS-CoV, and 2019-nCoV) are much more unique. They represent examples of new viruses that emerge after "jumping" from animals to humans. These viruses are known to infect animals, but a random mutation allows them to suddenly start infecting humans (animal-to-human transmission). An outbreak occurs when an infected person is then able to infect other people (human-to-human transmission). These new viruses are more dangerous for a variety of reasons, but for me the worst aspect is humans have no natural immunity. The rest of this post will focus on the these "outbreak" coronaviruses. 
 
 #Severe Acute Respiratory Syndrome (SARS-CoV)
-The first case of SARS-CoV occured in Guangdong, China in November of 2002 [WHO, (2013)](https://www.cdc.gov/about/history/sars/timeline.htm). However, China did not officially report the infection to the World Health Organization (WHO) until February 11, 2003 [WHO, (2003)](https://www.who.int/csr/don/2003_03_21/en/). It wasn't until 2017 that chinese scientists isolated the source of SARS to a single cave in the Yunnan province in China [Hu et al.(2017)](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006698). 
+The first case of SARS-CoV occured in Guangdong, China in November of 2002 [WHO, (2013)](https://www.cdc.gov/about/history/sars/timeline.htm). However, China did not officially report the infection to the World Health Organization (WHO) until February 11, 2003 [WHO, (2003)](https://www.who.int/csr/don/2003_03_21/en/). The WHO issued a global alert on March 12th and reported 150 known cases on March 15th [WHO, 2003](https://www.who.int/csr/don/2003_03_16/en/). The number of cases had increase to 1,622 by the end of March [(WHO, 2003)](https://www.who.int/csr/don/2003_03_31/en/), and balloon to 5,663 by the end of April [(WHO, 2003)](https://www.who.int/csr/don/2003_05_30a/en/). On May 22, 2003, the cases crossed the 8,000 mark and had already started to taper off. Finally, on Juy 5, 2003 the WHO declared they had stopped and contained human-to-human transmissions of SARS [WHO, 2003](https://www.who.int/csr/don/2003_07_05/en/). The total cases came to 8,096 with 774 deaths in 17 countries for a final mortality rate of 9.19%. Eventually it was found that the disease originated in horseshoe bats but went through civets before making the jump to humans. Amazingly, it wasn't until 2017 that chinese scientists isolated the exact source of SARS to a single cave in the Yunnan province in China [Hu et al.(2017)](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006698). 
 
 ```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -127,10 +127,15 @@ The first case of SARS-CoV occured in Guangdong, China in November of 2002 [WHO,
 
 #get the raw data into vectors
 
-country <- c("Australia","Canada","China","Hong Kong","Macau","Taiwan","France",
+country.text <- c("Australia","Canada","China","Hong Kong","Macau","Taiwan","France",
 "Germany","India","Indonesia","Italy","Kuwait","Malaysia","Mongolia","New Zealand",
 "Philippines","Ireland","Korea","Romania","Russia","Singapore","South Africa","Spain",
 "Sweden","Switzerland","Thailand","United Kingdom","United States","Vietnam")
+
+country.code <- c("AUS", "CAN", "CHN", "HKG", "MAC", "TWN", "FRA", "DEU", "IND", 
+                  "IDN", "ITA", "KWT", "MYS", "MNG", "NZL", "PHL", "IRL", "KOR", 
+                  "ROU", "RUS", "SGP", "ZAF", "ESP", "SWE", "CHE", "THA", "GBR", 
+                  "USA", "NVM")
 
 infections <- c(6,251,5327,1755,1,346,7,9,3,2,4,1,5,9,1,14,1,3,1,1,238,1,1,5,1,9,4,27,63)
 
@@ -147,7 +152,7 @@ last.case <- c("2003-04-01","2003-06-12","2003-06-03","2003-05-31","2003-05-05",
 "2003-04-23","2003-03-09","2003-05-27","2003-04-01","2003-07-13","2003-04-14")
 
 #combine the vectors into a dataframe
-sars.data <- cbind(country, infections, deaths, first.case, last.case)
+sars.data <- cbind(country.code, country.text, infections, deaths, first.case, last.case)
 
 ```
 
