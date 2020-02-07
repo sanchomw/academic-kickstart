@@ -1,8 +1,8 @@
 ---
-title: Comparing the 7 Coronaviruses
+title: Exploring the Data on Coronavirus Outbreaks
 author: 'Sancho '
 date: '2020-01-30'
-slug: comparing-the-7-coronaviruses
+slug: data-on-coronavirus-outbreaks
 categories: []
 tags:
   - Healthcare
@@ -29,7 +29,7 @@ rmarkdown::render("index.Rmd")
 # Intro to Coronaviruses
 
 ## History
-I was disappointed to find that coronaviruses have nothing to do with the beer, but instead refer to their appearance. The word "corona" is latin for "crown or garland", which is how coronaviruses appear under microscopes. However, this does explain why the corona logo has a crown on top of it. Visually, it is more similar to the sun's corona, which is the outer part of the sun's atmosphere. 
+I was disappointed to find that coronaviruses have nothing to do with the beer, but instead refer to their appearance. The word "corona" is latin for "crown or garland", which is how coronaviruses appear under microscopes. However, this does explain why the corona logo has a crown on top of it. Visually, it is more similar to the sun's corona, which is the outer part of the sun's atmosphere. There are currently 7 known human coronaviruses. 
 
 According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) the 7 coronaviruses are: 
 
@@ -37,8 +37,8 @@ According to the [CDC (2020)](https://www.cdc.gov/coronavirus/types.html) the 7 
 * OC43
 * NL63
 * HKU1
-* MERS-CoV
 * SARS-CoV
+* MERS-CoV
 * 2019 Novel Coronavirus
 
 The first human  coronaviruses (229E and OC43) were first discovered in the late 1960s [(Geller, Varbanov, and Duval, 2012)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3509683/). It wasn't until the 2003 SARS outbreak that the next one (SARS-CoV) was found. This was followed by NL63 in 2004, and then HKU1 in 2005. Virologists decided to take a break for 7 years, and only discovered the next one (MERS-CoV) due to the MERS outbreak in 2012. That brings us to the current outbreak of Wuhan Virus when the 7th coronavirus (2019 Novel Coronavirus) was discovered. I know "2019 Novel Coronavirus" doesn't have a great ring to it, but MERS-CoV was actually called "Novel Coronavirus 2012" before it got a final name. 
@@ -113,11 +113,45 @@ plot1 %>%
 
 
 ##The Common Coronaviruses
-The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold [CDC (2020)](https://www.cdc.gov/coronavirus/types.html), but can lead to more severe complications. Much like the cold, infections are much more common during the winter months and cases drop to almost none during the summer [Gaunt, Hardie, Claas, Simmonds, & Templeton, 2010](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf). [Guant et. al](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf) tested 11,661 sick people between 2006 and 2009 and found 267 (2.3%) tested positive for at least one of the four corona viruses.
+The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold [CDC (2020)](https://www.cdc.gov/coronavirus/types.html), but can lead to more severe complications including pneumonia. According to [Gaunt, Hardie, Claas, Simmonds, & Templeton, 2010](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf), infections are much more common during the winter months and cases drop to almost none during the summer . [Guant et. al](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf) tested 11,661 sick people between 2006 and 2009 and found 267 (2.3%) tested positive for at least one of these four corona viruses. 
 
 ##The Outbreak Coronaviruses
 The other three (MERS-CoV, SARS-CoV, and 2019-nCoV) are much more unique. They represent examples of new viruses that emerge after "jumping" from animals to humans. These viruses are known to infect animals, but a random mutation allows them to suddenly start infecting humans. An outbreak occurs when those people are then able to infect other people. 
 
+#Severe Acute Respiratory Syndrome (SARS-CoV)
+
+```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+#get the raw data into vectors
+
+country <- c("Australia","Canada","China","Hong Kong","Macau","Taiwan","France",
+"Germany","India","Indonesia","Italy","Kuwait","Malaysia","Mongolia","New Zealand",
+"Philippines","Ireland","Korea","Romania","Russia","Singapore","South Africa","Spain",
+"Sweden","Switzerland","Thailand","United Kingdom","United States","Vietnam")
+
+infections <- c(6,251,5327,1755,1,346,7,9,3,2,4,1,5,9,1,14,1,3,1,1,238,1,1,5,1,9,4,27,63)
+
+deaths <- c(0,43,349,299,0,37,1,0,0,0,0,0,2,0,0,2,0,0,0,0,33,1,0,0,0,2,0,0,5)
+
+first.case <- c("2003-02-26","2003-02-23","2002-11-16","2003-02-15","2003-05-05","2003-02-25","2003-03-21",
+"2003-03-09","2003-04-25","2003-04-06","2003-03-12","2003-04-09","2003-03-14","2003-03-31","2003-04-20",
+"2003-02-25","2003-02-27","2003-04-25","2003-03-19","2003-05-05","2003-02-25","2003-04-03","2003-03-26",
+"2003-03-28","2003-03-09","2003-03-11","2003-03-01","2003-02-24","2003-02-23")
+
+last.case <- c("2003-04-01","2003-06-12","2003-06-03","2003-05-31","2003-05-05","2003-06-15","2003-05-03",
+"2003-05-06","2003-05-06","2003-04-17","2003-04-20","2003-04-09","2003-04-22","2003-05-06","2003-04-20",
+"2003-05-05","2003-02-27","2003-05-10","2003-03-19","2003-05-05","2003-05-05","2003-04-03","2003-03-26",
+"2003-04-23","2003-03-09","2003-05-27","2003-04-01","2003-07-13","2003-04-14")
+
+#combine the vectors into a dataframe
+sars.data <- cbind(country, infections, deaths, first.case, last.case)
+
+
+```
+
+#Middle East Respiratory Syndrome (MERS-CoV)
+
+#Novel Coronavirus 2019 (2019-nCoV)
 
 
 
