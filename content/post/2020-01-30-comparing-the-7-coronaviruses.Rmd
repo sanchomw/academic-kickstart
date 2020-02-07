@@ -112,15 +112,18 @@ plot1 %>%
 ```
 
 
-##The Common Coronaviruses
-The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold [CDC (2020)](https://www.cdc.gov/coronavirus/types.html), but can lead to more severe complications including pneumonia. According to [Gaunt, Hardie, Claas, Simmonds, & Templeton, 2010](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf), infections are much more common during the winter months and cases drop to almost none during the summer . [Guant et. al](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf) tested 11,661 sick people between 2006 and 2009 and found 267 (2.3%) tested positive for at least one of these four corona viruses. 
+##The "Common" Coronaviruses
+The first four (229E, NL63, OC43, and HKU1) are often associated with the common cold [CDC (2020)](https://www.cdc.gov/coronavirus/types.html), but can lead to more severe complications including pneumonia. According to [Gaunt, Hardie, Claas, Simmonds, & Templeton, (2010)](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf), infections are much more common during the winter months and cases drop to almost none during the summer . [Guant et. al](https://jcm.asm.org/content/jcm/48/8/2940.full.pdf) tested 11,661 sick people between 2006 and 2009 and found 267 (2.3%) tested positive for at least one of these four corona viruses. 
 
-##The Outbreak Coronaviruses
-The other three (MERS-CoV, SARS-CoV, and 2019-nCoV) are much more unique. They represent examples of new viruses that emerge after "jumping" from animals to humans. These viruses are known to infect animals, but a random mutation allows them to suddenly start infecting humans. An outbreak occurs when those people are then able to infect other people. 
+##The "Outbreak" Coronaviruses
+The other three (MERS-CoV, SARS-CoV, and 2019-nCoV) are much more unique. They represent examples of new viruses that emerge after "jumping" from animals to humans. These viruses are known to infect animals, but a random mutation allows them to suddenly start infecting humans (animal-to-human transmission). An outbreak occurs when an infected person is then able to infect other people (human-to-human transmission). These new viruses are more dangerous for a variety of reasons, but for me the worst aspect is humans have no natural immunity. The rest of this post will focus on the these "outbreak" coronaviruses. 
 
 #Severe Acute Respiratory Syndrome (SARS-CoV)
+The first case of SARS-CoV occured in Guangdong, China in November of 2002 [WHO, (2013)](https://www.cdc.gov/about/history/sars/timeline.htm). However, China did not officially report the infection to the World Health Organization (WHO) until February 11, 2003 [WHO, (2003)](https://www.who.int/csr/don/2003_03_21/en/). It wasn't until 2017 that chinese scientists isolated the source of SARS to a single cave in the Yunnan province in China [Hu et al.(2017)](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006698). 
 
 ```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+#datasource: https://www.who.int/csr/sars/country/table2004_04_21/en/
 
 #get the raw data into vectors
 
@@ -145,7 +148,6 @@ last.case <- c("2003-04-01","2003-06-12","2003-06-03","2003-05-31","2003-05-05",
 
 #combine the vectors into a dataframe
 sars.data <- cbind(country, infections, deaths, first.case, last.case)
-
 
 ```
 
