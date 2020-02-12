@@ -222,10 +222,25 @@ mers.clean <- mers.clean[complete.cases(mers.clean[ , 26:27]),]
 
 #select the columns i want
 mers.clean <- mers.clean %>%
-  select(patient_type, transmission_route, lat, long, month_start, year_start, month_end, year_end)
+  select(patient_type, transmission_route, lat, long, year = year_start, year_end)
+
+#set up the map specs
+map.specs <- list(  scope = "world", projection = list(type = "Mercator"),  showland = TRUE,  landcolor = toRGB("gray88"),  subunitwidth = 0.5,  
+                    countrywidth = 0.5,  subunitcolor = toRGB("white"), countrycolor = toRGB("white"), showcountries = TRUE)
+
+plot3 <- plot_geo(mers.clean, lat = ~lat, lon = ~long, frame = ~year) %>%
+  add_markers(text = ~paste(paste("Patient Type:", patient_type), paste("Transmission Route:", transmission_route), sep = "<br />"),
+    symbol = I("square"), size = I(8), hoverinfo = "text", marker = list(line = boundary.color), color = "firebrick1") %>%
+  layout(title = 'MERS Infections by Year<br>Source: <a href="http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_MERS_COV_DATABASE_1983_2017_Y2019M07D23.CSV">WHO</a>', 
+         geo = map.specs, showlegend = FALSE)
+
+```
 
 
-#Data source: Ramshaw, R.E., Letourneau, I.D., Hong, A.Y. et al. A database of geopositioned Middle East Respiratory Syndrome Coronavirus occurrences. Sci Data 6, 318 (2019). https://doi.org/10.1038/s41597-019-0330-0
+```{r out.width = '100%', message = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
+
+plot3 %>%
+  frameWidget(width = "100%", height = "100%")
 
 ```
 
