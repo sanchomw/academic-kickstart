@@ -203,7 +203,14 @@ While researching MERS I came a really cool publication by [Ramshaw et al. (2019
 1. They are all human cases (233 were animal, 3 were environmental) 
 2. They have complete longitude and latitude data (244 of the humans were missing this data)
 
-This accounts for 16% of the total cases, but Ramshaw et al. do warn that its possible that some cases are duplicates.
+This accounts for 16% of the total cases, but Ramshaw et al. do warn that its possible that some cases are duplicates. The map below shows these cases with a slider for each year. If you hover over the case it will tell you the "patient type" which is how they got infected. 
+
+* Patient Types:
+    + Absent - Suspected case that was negative for MERS-CoV
+    + Import - Virus brought from another country
+    + Index - Animal-to-human infection
+    + Secondary - Human-to-human infection
+    + Unspecified 
 
 ```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -229,7 +236,7 @@ map.specs <- list(  scope = "world", projection = list(type = "Mercator"),  show
                     countrywidth = 0.5,  subunitcolor = toRGB("white"), countrycolor = toRGB("white"), showcountries = TRUE)
 
 plot3 <- plot_geo(mers.clean, lat = ~lat, lon = ~long, frame = ~year) %>%
-  add_markers(text = ~paste(paste("Patient Type:", patient_type), paste("Transmission Route:", transmission_route), sep = "<br />"),
+  add_markers(text = ~paste("Patient Type:", patient_type),
     symbol = I("square"), size = I(8), hoverinfo = "text", marker = list(line = boundary.color), color = "firebrick1") %>%
   layout(title = 'MERS Infections by Year<br>Source: <a href="http://ghdx.healthdata.org/sites/default/files/record-attached-files/IHME_MERS_COV_DATABASE_1983_2017_Y2019M07D23.CSV">WHO</a>', 
          geo = map.specs, showlegend = FALSE)
