@@ -253,8 +253,26 @@ plot3 %>%
 
 #Novel Coronavirus 2019 (2019-nCoV)
 
+This finally brings us to the current outbreak of coronavirus, 2019-nCoV. At the time of this writing, the outbreak is still ongoing, so please keep in mind information may change in the future. I like to think of it as taking a picture, its just a snapshot in the moment but does not tell the whole story. 
+
+Im going to start with my favorite source on this the World Health Organization. On December 31, 2019 China informed the WHO about a cluster of 44 pneumonia cases with an unknown cause in Wuhan City, Hubei Province [(WHO, 2020)](https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200121-sitrep-1-2019-ncov.pdf?sfvrsn=20a99c10_4). On January 7, 2020 a new coronavirus was identified to be the cause. By the time the WHO published its first situation report on January 20, 2020, the number of cases had increased to 282 and it had already spread to Thailand, Japan, and South Korea. The next day the cases jumped up against to 314 cases[(WHO, 2020](https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200122-sitrep-2-2019-ncov.pdf?sfvrsn=4d5bcbca_2), and it has continued increasing at a high rate from there. 
+
+I was able to find a great day-by-day, timeseries dataset on [Kaggle](https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset#time_series_2019_ncov_recovered.csv). It contains data that was taken from a really cool [Johns Hopkins University Dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6). Johns Hopkins in turn took the data from the CDC, WHO, and other health organizations. Which really reminds me a quote by Wilson Mizner, "When you steal from one author, it's plagiarism; if you steal from many, it's research". 
+
+```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+
+#clean up the mess
+rm(plot3, mers.data, mers.clean)
+
+ncov19.day <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/2019_nCoV_data.csv"))
+ncov19.confirm <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/time_series_2019_ncov_confirmed.csv"))
+ncov19.deaths <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/time_series_2019_ncov_deaths.csv"))
+ncov19.recover <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/time_series_2019_ncov_recovered.csv"))
 
 
+
+
+```
 
 
 
