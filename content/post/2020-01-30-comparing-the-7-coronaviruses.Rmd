@@ -53,6 +53,7 @@ library(scales)
 library(ggrepel)
 library(plotly)
 library(widgetframe)
+library(httr)
 
 ```
 
@@ -121,7 +122,7 @@ The other three (MERS-CoV, SARS-CoV, and 2019-nCoV) are much more unique. They r
 #Severe Acute Respiratory Syndrome (SARS-CoV)
 The first case of SARS-CoV occured in Guangdong, China in November of 2002 [(WHO, 2013)](https://www.cdc.gov/about/history/sars/timeline.htm). However, China did not officially report the infection to the World Health Organization (WHO) until February 11, 2003 [(WHO, 2003)](https://www.who.int/csr/don/2003_03_21/en/). The WHO issued a global alert on March 12th and reported 150 known cases on March 15th [(WHO, 2003)](https://www.who.int/csr/don/2003_03_16/en/). The number of cases had increase to 1,622 by the end of March [(WHO, 2003)](https://www.who.int/csr/don/2003_03_31/en/), and balloon to 5,663 by the end of April [(WHO, 2003)](https://www.who.int/csr/don/2003_05_30a/en/). On May 22, 2003, the cases crossed the 8,000 mark and had already started to taper off. 
 
-Finally, on Juy 5, 2003 the WHO declared they had stopped and contained human-to-human transmissions of SARS [(WHO, 2003)](https://www.who.int/csr/don/2003_07_05/en/). The total cases came to 8,096 with 774 deaths in 17 countries for a final mortality rate of 9.19%. See the map below for a final count of infections and deaths by country. Eventually it was found that the disease originated in horseshoe bats but went through civets before making the jump to humans. It wasn't until 2017 (14 years later) that chinese scientists isolated the exact source of SARS to a single cave in the Yunnan province of China [(Hu et al., 2017)](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006698). 
+Finally, on Juy 5, 2003 the WHO declared they had stopped and contained human-to-human transmissions of SARS [(WHO, 2003)](https://www.who.int/csr/don/2003_07_05/en/). The total cases came to 8,096 with 774 deaths in 17 countries for a final mortality rate of 9.19%. See the map below for a final count of infections and deaths by country. Eventually it was found that the disease originated in horseshoe bats but went through civets before making the jump to humans. It wasn't until 2017 (14 years later) that chinese scientists isolated the exact source of SARS to a single cave in the Yunnan province of China [(Hu et al., 2017)](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006698). The map below contains the final infection and death counts for SARS-CoV. It is interactive, you can zoom in/out and hovering over the countries gives you the counts. 
 
 ```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -257,24 +258,147 @@ This finally brings us to the current outbreak of coronavirus, 2019-nCoV. At the
 
 Im going to start with my favorite source on this the World Health Organization. On December 31, 2019 China informed the WHO about a cluster of 44 pneumonia cases with an unknown cause in Wuhan City, Hubei Province [(WHO, 2020)](https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200121-sitrep-1-2019-ncov.pdf?sfvrsn=20a99c10_4). On January 7, 2020 a new coronavirus was identified to be the cause. By the time the WHO published its first situation report on January 20, 2020, the number of cases had increased to 282 and it had already spread to Thailand, Japan, and South Korea. The next day the cases jumped up against to 314 cases[(WHO, 2020](https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200122-sitrep-2-2019-ncov.pdf?sfvrsn=4d5bcbca_2), and it has continued increasing at a high rate from there. 
 
-I was able to find a great day-by-day, timeseries dataset on [Kaggle](https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset#time_series_2019_ncov_recovered.csv). It contains data that was taken from a really cool [Johns Hopkins University Dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6). Johns Hopkins in turn took the data from the CDC, WHO, and other health organizations. Which really reminds me a quote by Wilson Mizner, "When you steal from one author, it's plagiarism; if you steal from many, it's research". 
+I was able to find a great day-by-day, timeseries dataset on [Kaggle](https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset#time_series_2019_ncov_recovered.csv). It contains data that was taken from a really cool [Johns Hopkins University Dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6). Johns Hopkins in turn took the data from the CDC, WHO, and other health organizations. The data spans from January 22, 2020 through February 11, 2020. On January 21, 2020, there were 314 cases and 6 deaths, so the data begins after this point. 
 
 ```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 
 #clean up the mess
 rm(plot3, mers.data, mers.clean)
 
-ncov19.day <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/2019_nCoV_data.csv"))
-ncov19.confirm <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/time_series_2019_ncov_confirmed.csv"))
-ncov19.deaths <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/time_series_2019_ncov_deaths.csv"))
-ncov19.recover <- read.csv(url("https://github.com/sanchomw/blog-data/blob/master/time_series_2019_ncov_recovered.csv"))
+ncov19.day <- read.csv(url("https://raw.githubusercontent.com/sanchomw/blog-data/master/2019_nCoV_data.csv"))
+ncov19.confirm <- read.csv(url("https://raw.githubusercontent.com/sanchomw/blog-data/master/time_series_2019_ncov_confirmed.csv"))
+ncov19.deaths <- read.csv(url("https://raw.githubusercontent.com/sanchomw/blog-data/master/time_series_2019_ncov_deaths.csv"))
+ncov19.recover <- read.csv(url("https://raw.githubusercontent.com/sanchomw/blog-data/master/time_series_2019_ncov_recovered.csv"))
 
+#prep data for plotting
+#ncov19.day$Date <- as.Date(substr(as.character(ncov19.day$Date), start = 1, stop = 10), "%m/%d/%Y")
 
+#prep the cleaning data for plotting
+temp.df <- ncov19.day %>%
+  group_by(Date) %>%
+  summarise(Cases = sum(Confirmed),
+            Deaths = sum(Deaths),
+            Recoveries = sum(Recovered))# %>%
+ # mutate(f = 1:n())
 
+#change date to proper object
+temp.df <- temp.df %>%
+  mutate(Date = as.Date(substr(as.character(Date), start = 1, stop = 10), "%m/%d/%Y")) #%>%
+#  gather(., Status, Value, Cases: Recoveries)
+
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- lapply(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+
+temp.df <- temp.df %>%
+  accumulate_by(~Date)
+
+plot4 <- ggplot(temp.df,aes(Date, Cases, frame = frame)) +
+  geom_line()
+
+plot4 <- ggplotly(plot4) %>%
+  layout(
+    title = "NCoV-19 Cases",
+    yaxis = list(
+      title = "Cases",
+      zeroline = F
+    ),
+    xaxis = list(
+      title = "Day",
+      zeroline = F, 
+      showgrid = F
+    )
+  ) %>% 
+  animation_opts(
+    frame = 100, 
+    transition = 0, 
+    redraw = FALSE
+  ) %>%
+  animation_slider(
+    currentvalue = list(
+      prefix = "Date "
+    )
+  )
+
+plot5 <- ggplot(temp.df,aes(Date, Deaths, frame = frame)) +
+  geom_line()
+
+plot5 <- ggplotly(plot5) %>%
+  layout(
+    title = "NCoV-19 Deaths",
+    yaxis = list(
+      title = "Deaths",
+      zeroline = F
+    ),
+    xaxis = list(
+      title = "Day",
+      zeroline = F, 
+      showgrid = F
+    )
+  ) %>% 
+  animation_opts(
+    frame = 100, 
+    transition = 0, 
+    redraw = FALSE
+  ) %>%
+  animation_slider(
+    currentvalue = list(
+      prefix = "Date "
+    )
+  )
+
+plot6 <- ggplot(temp.df,aes(Date, Recoveries, frame = frame)) +
+  geom_line()
+
+plot6 <- ggplotly(plot6) %>%
+  layout(
+    title = "NCoV-19 Recoveries",
+    yaxis = list(
+      title = "Recoveries",
+      zeroline = F
+    ),
+    xaxis = list(
+      title = "Day",
+      zeroline = F, 
+      showgrid = F
+    )
+  ) %>% 
+  animation_opts(
+    frame = 100, 
+    transition = 0, 
+    redraw = FALSE
+  ) %>%
+  animation_slider(
+    currentvalue = list(
+      prefix = "Date "
+    )
+  )
 
 ```
 
+```{r out.width = '100%', message = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
 
+plot4 %>%
+  frameWidget(width = "100%", height = "100%")
+
+```
+
+```{r out.width = '100%', message = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
+plot5 %>%
+  frameWidget(width = "100%", height = "100%")
+
+```
+
+```{r out.width = '100%', message = FALSE, echo = FALSE, message = FALSE, warning = FALSE}
+plot6 %>%
+  frameWidget(width = "100%", height = "100%")
+
+```
 
 
 
