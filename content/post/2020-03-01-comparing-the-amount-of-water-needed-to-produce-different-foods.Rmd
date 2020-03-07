@@ -1,0 +1,46 @@
+---
+title: 'Comparing the Amount of Water Needed to Produce Different Foods '
+author: 'Sancho '
+date: '2020-03-01'
+slug: water-needed-to-produce-food
+categories: []
+tags:
+  - Food
+  - Environmental
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-03-01T19:49:32-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+output:
+  blogdown::html_page:
+    toc: yes
+draft: true
+---
+
+```{r include=FALSE, eval=FALSE}
+# render magic (copied from ellocke, not exactly sure what this does)
+rmarkdown::render("index.Rmd")
+```
+
+```{r}
+#links
+#https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-lakes/
+#https://waterfootprint.org/en/resources/waterstat/product-water-footprint-statistics/
+
+
+```
+
+#Why should we care about water? 
+
+##Freshwater vs Saltwater
+
+
+##Fresh Water Scarcity 
+
+
