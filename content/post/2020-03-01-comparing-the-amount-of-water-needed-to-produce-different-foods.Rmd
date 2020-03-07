@@ -38,9 +38,15 @@ rmarkdown::render("index.Rmd")
 
 #Why should we care about water? 
 
-##Freshwater vs Saltwater
-
+I remember my first reaction to hearing about water scarcity was doubt. I mean isn't 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2019 it was announced that Cape Town, SOuth
 
 ##Fresh Water Scarcity 
 
 
+```{r}
+library(ggplot2)
+library(dplyr)
+library(maps)
+
+
+```
