@@ -57,7 +57,7 @@ library(httr)
 
 ```
 
-```{r cache = TRUE, echo = FALSE}
+```{r echo = FALSE}
 
 #make a vector of years
 Year <- c(1965, 2003, 2004, 2005, 2012, 2019)
@@ -79,7 +79,7 @@ rm(Year, dummy, Virus)
 
 ```
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 
 #plot it 
 plot1 <- ggplot(virus.year, aes(x = Year, y = dummy, label = Virus)) +
@@ -124,7 +124,7 @@ The first case of SARS-CoV occured in Guangdong, China in November of 2002 [(WHO
 
 Finally, on July 5, 2003 the WHO declared they had stopped and contained human-to-human transmissions of SARS [(WHO, 2003)](https://www.who.int/csr/don/2003_07_05/en/). The total cases came to 8,096 with 774 deaths in 17 countries for a final mortality rate of 9.19%. See the map below for a final count of infections and deaths by country. Eventually it was found that the disease originated in horseshoe bats but went through civets (small mammals about the size of a house cat that look more like a long black/white mix of a fox and raccoon) before making the jump to humans. It wasn't until 2017 (14 years later) that Chinese scientists isolated the exact source of SARS to a single cave in the Yunnan province of China [(Hu et al., 2017)](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006698). The map below contains the final infection and death counts for SARS-CoV. It is interactive; you can zoom in/out and hovering over the countries gives you the counts. 
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 
 #clean up last graph
 rm(plot1, virus.year)
@@ -168,7 +168,7 @@ sars.data[,c(3,4)] <- apply(sars.data[,c(3,4)], 2, function(x) as.numeric(x))
 
 ```
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 
 #plot it 
 #set boundary color
@@ -213,7 +213,7 @@ This accounts for 16% of the total cases, but Ramshaw et al. do warn that it's p
     + Secondary - Human-to-human infection
     + Unspecified 
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 
 #clean up prior chart
 rm(plot2, map.specs, sars.data, country, country.code, country.text, deaths, first.case, infections, last.case)
@@ -260,7 +260,7 @@ I'm going to start with my favorite source on this topic: WHO. On December 31, 2
 
 I was able to find a great day-by-day, timeseries dataset on [Kaggle](https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset#time_series_2019_ncov_recovered.csv). It contains data that was taken from a really cool [Johns Hopkins University Dashboard](https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6). Johns Hopkins in turn took the data from the CDC, WHO, and other health organizations. The data spans from January 22, 2020 through February 11, 2020. On January 21, 2020, there were 314 cases and 6 deaths, so the data begin after this point. The chart below shows the total infections by day. 
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 
 #clean up the mess
 rm(plot3, mers.data, mers.clean)
@@ -336,7 +336,7 @@ plot4 %>%
 
 The virus started in the Hubei province and the majority of cases are in that province (33,366 out of 45,117 or 73.9%). However, the cases have spread worldwide since then and this dataset has 11,751 of those cases. The map below shows the location of those cases with the Hubei cases removed. The size of the circle represents the number of cases (bigger circle = more cases), while the color represents the number of deaths. If you click on the legend you can add/remove circles based on the number of deaths. Hovering over a cirlce will tell you the number of infections, deaths, and recoveries for that area. 
 
-```{r cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r echo = FALSE, message = FALSE, warning = FALSE}
 
 #select all non-Hubei cases
 temp.df <- ncov19.day %>%
