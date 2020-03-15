@@ -28,9 +28,24 @@ draft: true
 rmarkdown::render("index.Rmd")
 ```
 
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+```
+
 ```{r}
+library(blogdown)
 library(tidyverse)
 library(maps)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(rgeos)
+library(ggspatial)
+library(plotly)
+library(widgetframe)
+library(httr)
 
 #links
 #https://www.usgs.gov/special-topic/water-science-school/science/how-much-water-there-earth?qt-science_center_objects=0#qt-science_center_objects
@@ -40,25 +55,73 @@ library(maps)
 
 ```
 
-#Why should we care about water? 
+#Why should we care about water?
 
-I remember my first reaction to hearing about water scarcity was doubt. My first through was: isn't 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2018 it was announced that Cape Town, South Africa was less than 90 days away from running out of water, which they called "Day Zero" [(Time, 2018)](https://time.com/5103259/cape-town-water-crisis/). At that point they would have to shut off water and people would have to go to water collections points, then wait in line to receive their daily allotment of 6.6 gallons. For reference, shower heads in the US are usually capped at 2.5 gallons a minute [(Portland Water Bureau)](https://www.portlandoregon.gov/water/article/305153), which means a 2 minute and 38 second shower would use up all of the allowance. 
+##Cape Town Water Crisis
 
-##Fresh vs Salt Water
-
+I remember my first reaction to hearing about water scarcity was doubt. I immediately thought: isn't 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2018 it was announced that Cape Town, South Africa was less than 90 days away from running out of water, which they called "Day Zero" [(Time, 2018)](https://time.com/5103259/cape-town-water-crisis/). At that point they would have to shut off water and people would have to go to one of 200 water collections points in the city. They would then have wait in line to receive their daily allotment of 6.6 gallons. For reference, shower heads in the US are usually capped at 2.5 gallons a minute [(Portland Water Bureau)](https://www.portlandoregon.gov/water/article/305153). Using this 2.5 gallon/minute flow rate, the 6.6 gallons of water would allow you to have a 2 minute and 38 second shower. 
 
 ```{r}
 
 #get the world map data
-world <- map_data("world")
+world <- ne_countries(scale = "medium", returnclass = "sf")
 
-ggplot(data = world) +
-    geom_sf() +
-    coord_sf(xlim = c(-102.15, -74.12), ylim = c(7.65, 33.97), expand = FALSE)
+plot1 <- ggplot(data = world) + 
+  geom_sf() +
+  coord_sf(xlim = c(-20,50), ylim = c(-40, 30), expand = FALSE)+
+  geom_rect(xmin = 14, xmax = 22, ymin = -37, ymax = -29, fill = NA, color = "black", size = 1.5) +
+  labs(x = "", y = "")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill = "azure"),
+        panel.border = element_rect(fill = NA))
 
-33.9249° S, 18.4241° E
+#plot1 <- ggplotly(plot1)
+
+plot2 <- ggplot(data = world) +
+  geom_sf() +
+  annotation_scale(location = "bl", width_hint = 0.5, unit_category = "imperial") +
+  annotation_north_arrow(location = "bl", which_north = "true", 
+      pad_x = unit(0.1, "in"), pad_y = unit(0.5, "in"),
+      style = north_arrow_fancy_orienteering) +
+  coord_sf(xlim = c(14, 22), ylim = c(-37, -29), expand = FALSE)+
+  geom_point(aes(x = 18.4241, y = -33.9249), shape = 21, color = "blue",size = 15, fill = NA)+
+  labs(x = "", y = "")+
+  theme_bw()+
+  theme(panel.background = element_rect(fill = "azure"),
+        panel.border = element_rect(fill = NA))
+
+#plot2 <- ggplotly(plot2)
+
+#geom_point(shape = 21, colour = "black", fill = "white", size = 5, stroke = 5)
+#33.9249° S, 18.4241° E
+```
+
+```{r fig.width=3 , fig.height=3 , fig.show = "hold", out.width = "50%"}
+
+plot1 #%>%
+  #frameWidget(width = "100%", height = "100%")
+
+plot2 #%>%
+  #frameWidget(width = "100%", height = "100%")
 
 ```
+
+##Fresh vs Salt Water
+
+The biggest irony about the Cape Town water crisis is that the city is surrounded by water (see map above).However, it is surrounded by salty, ocean water, which is totally unusable for most of our needs. When I said earlier that the vast majority of the earth was covered in water, I didn't think about that fact that most of water is in the ocean. If we were cats this would be much less of an issue, this is because cat's kidneys are efficient enough that they can drink salt water for short periods of time and hydrate from it [Base Paws](https://www.basepaws.com/blog/top-10-random-facts-about-cats/). 
+
+According to the [USGS](https://www.usgs.gov/special-topic/water-science-school/science/where-earths-water?qt-science_center_objects=0#qt-science_center_objects), fresh water only accounts for 2.5% of all water on the earth. Of the fresh water we do have, about 68% is frozen in glaciers and ice caps, 30.1% is underground, and only 1.2% can be found on the earths surface. The easily usable water falls into the following categories:
+
+* Lakes
+* Soil moisture
+* Swamps, marshes
+* Rivers
+* Atmosphere
+* Living things
+
+Therefore, the non-frozen, surface, fresh water accounts for 1.01% of all water on the planet. 
+
+
 
 Fortunately, through several measures Capetonians were able to redirect water and reduce their use enough to push back Day Zero into the rainy season. When the rains could refill the reservoir and they were able to postpone Day Zero indefinitely. One measure taken was every person was capped at 23 gallons per day, which is about 9min and 12 seconds of shower time per person. Businesses also helped with the effort, restaurants put up "if its yellow let it mellow" signs, and offices had "dirty shirt" challenges to see who could wear the same shirt the longest without washing [(Alexander, 2019)](https://www.citylab.com/environment/2019/04/cape-town-water-conservation-south-africa-drought/587011/). However, one single change by the largest consumers of water was able to reduce water usage by 15%. Farmers agreed to half the water they were using from 30% of all water down to 15% [(Mail and Guardian, 2018)](https://mg.co.za/article/2018-02-05-day-zero-pushed-back-to-may-11/). 
 

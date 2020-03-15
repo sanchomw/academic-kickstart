@@ -27,30 +27,36 @@ draft: true
 <div id="TOC">
 <ul>
 <li><a href="#why-should-we-care-about-water">Why should we care about water?</a><ul>
-<li><a href="#fresh-water-scarcity">Fresh Water Scarcity</a></li>
+<li><a href="#cape-town-water-crisis">Cape Town Water Crisis</a></li>
+<li><a href="#fresh-vs-salt-water">Fresh vs Salt Water</a></li>
 </ul></li>
+<li><a href="#water-use-in-agriculture">Water Use in Agriculture</a></li>
 </ul>
 </div>
 
-<pre class="r"><code>#links
-#https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-lakes/
-#https://waterfootprint.org/en/resources/waterstat/product-water-footprint-statistics/</code></pre>
 <div id="why-should-we-care-about-water" class="section level1">
 <h1>Why should we care about water?</h1>
-<p>I remember my first reaction to hearing about water scarcity was doubt. I mean isn’t 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2019 it was announced that Cape Town, SOuth</p>
-<div id="fresh-water-scarcity" class="section level2">
-<h2>Fresh Water Scarcity</h2>
-<pre class="r"><code>library(ggplot2)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(maps)</code></pre>
-<pre><code>## Warning: package &#39;maps&#39; was built under R version 3.6.3</code></pre>
+<div id="cape-town-water-crisis" class="section level2">
+<h2>Cape Town Water Crisis</h2>
+<p>I remember my first reaction to hearing about water scarcity was doubt. I immediately thought: isn’t 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2018 it was announced that Cape Town, South Africa was less than 90 days away from running out of water, which they called “Day Zero” <a href="https://time.com/5103259/cape-town-water-crisis/">(Time, 2018)</a>. At that point they would have to shut off water and people would have to go to one of 200 water collections points in the city. They would then have wait in line to receive their daily allotment of 6.6 gallons. For reference, shower heads in the US are usually capped at 2.5 gallons a minute <a href="https://www.portlandoregon.gov/water/article/305153">(Portland Water Bureau)</a>. Using this 2.5 gallon/minute flow rate, the 6.6 gallons of water would allow you to have a 2 minute and 38 second shower.</p>
+<p><img src="/post/2020-03-01-comparing-the-amount-of-water-needed-to-produce-different-foods_files/figure-html/unnamed-chunk-5-1.png" width="50%" /><img src="/post/2020-03-01-comparing-the-amount-of-water-needed-to-produce-different-foods_files/figure-html/unnamed-chunk-5-2.png" width="50%" /></p>
 </div>
+<div id="fresh-vs-salt-water" class="section level2">
+<h2>Fresh vs Salt Water</h2>
+<p>The biggest irony about the Cape Town water crisis is that the city is surrounded by water (see map above).However, it is surrounded by salty, ocean water, which is totally unusable for most of our needs. When I said earlier that the vast majority of the earth was covered in water, I didn’t think about that fact that most of water is in the ocean. If we were cats this would be much less of an issue, this is because cat’s kidneys are efficient enough that they can drink salt water for short periods of time and hydrate from it <a href="https://www.basepaws.com/blog/top-10-random-facts-about-cats/">Base Paws</a>.</p>
+<p>According to the <a href="https://www.usgs.gov/special-topic/water-science-school/science/where-earths-water?qt-science_center_objects=0#qt-science_center_objects">USGS</a>, fresh water only accounts for 2.5% of all water on the earth. Of the fresh water we do have, about 68% is frozen in glaciers and ice caps, 30.1% is underground, and only 1.2% can be found on the earths surface. The easily usable water falls into the following categories:</p>
+<ul>
+<li>Lakes</li>
+<li>Soil moisture</li>
+<li>Swamps, marshes</li>
+<li>Rivers</li>
+<li>Atmosphere</li>
+<li>Living things</li>
+</ul>
+<p>Therefore, the non-frozen, surface, fresh water accounts for 1.01% of all water on the planet.</p>
+<p>Fortunately, through several measures Capetonians were able to redirect water and reduce their use enough to push back Day Zero into the rainy season. When the rains could refill the reservoir and they were able to postpone Day Zero indefinitely. One measure taken was every person was capped at 23 gallons per day, which is about 9min and 12 seconds of shower time per person. Businesses also helped with the effort, restaurants put up “if its yellow let it mellow” signs, and offices had “dirty shirt” challenges to see who could wear the same shirt the longest without washing <a href="https://www.citylab.com/environment/2019/04/cape-town-water-conservation-south-africa-drought/587011/">(Alexander, 2019)</a>. However, one single change by the largest consumers of water was able to reduce water usage by 15%. Farmers agreed to half the water they were using from 30% of all water down to 15% <a href="https://mg.co.za/article/2018-02-05-day-zero-pushed-back-to-may-11/">(Mail and Guardian, 2018)</a>.</p>
+</div>
+</div>
+<div id="water-use-in-agriculture" class="section level1">
+<h1>Water Use in Agriculture</h1>
 </div>
