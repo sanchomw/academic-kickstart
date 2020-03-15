@@ -130,9 +130,7 @@ Fortunately, through several measures Capetonians were able to redirect water an
 
 
 ```{r}
-library(ggplot2)
-library(dplyr)
-library(maps)
+
 
 
 ```
