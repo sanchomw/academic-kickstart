@@ -46,10 +46,9 @@ library(ggspatial)
 library(plotly)
 library(widgetframe)
 library(httr)
+library(openxlsx)
 
 #links
-#https://www.usgs.gov/special-topic/water-science-school/science/how-much-water-there-earth?qt-science_center_objects=0#qt-science_center_objects
-#https://www.usgs.gov/special-topic/water-science-school/science/where-earths-water?qt-science_center_objects=0#qt-science_center_objects
 #https://waterfootprint.org/en/resources/waterstat/product-water-footprint-statistics/
 
 
@@ -59,13 +58,16 @@ library(httr)
 
 ##Cape Town Water Crisis
 
-I remember my first reaction to hearing about water scarcity was doubt. I immediately thought: isn't 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2018 it was announced that Cape Town, South Africa was less than 90 days away from running out of water, which they called "Day Zero" [(Time, 2018)](https://time.com/5103259/cape-town-water-crisis/). At that point they would have to shut off water and people would have to go to one of 200 water collections points in the city. They would then have wait in line to receive their daily allotment of 6.6 gallons. For reference, shower heads in the US are usually capped at 2.5 gallons a minute [(Portland Water Bureau)](https://www.portlandoregon.gov/water/article/305153). Using this 2.5 gallon/minute flow rate, the 6.6 gallons of water would allow you to have a 2 minute and 38 second shower. 
+I remember my first reaction to hearing about water scarcity was doubting it was a real issue. I immediately thought: isn't 70% of the whole planet covered in water? How can we possibly have a problem. Then, in January of 2018 it was announced that Cape Town, South Africa was less than 90 days away from running out of water, which they called "Day Zero" [(Time, 2018)](https://time.com/5103259/cape-town-water-crisis/). See the map below for the location of Cape Town. At that point they would have to shut off water and people would have to go to one of 200 water collections points in the city. They would then have wait in line to receive their daily allotment of 6.6 gallons. For reference, shower heads in the US are usually capped at 2.5 gallons a minute [(Portland Water Bureau)](https://www.portlandoregon.gov/water/article/305153). Using this 2.5 gallon/minute flow rate, the 6.6 gallons of water would allow you to have a 2 minute and 38 second shower. 
+
+Fortunately, through several measures Capetonians were able to redirect water and reduce their use enough to push back Day Zero into the rainy season. When the rains could refill the reservoir and they were able to postpone Day Zero indefinitely. One measure taken was every person was capped at 23 gallons per day, which is about 9min and 12 seconds of shower time per person. Businesses also helped with the effort, restaurants put up "if its yellow let it mellow" signs, and offices had "dirty shirt" challenges to see who could wear the same shirt the longest without washing [(Alexander, 2019)](https://www.citylab.com/environment/2019/04/cape-town-water-conservation-south-africa-drought/587011/). However, one single change was able to reduce water usage by 15%. Farmers agreed to half the water they were using from 30% of all water down to 15% [(Mail and Guardian, 2018)](https://mg.co.za/article/2018-02-05-day-zero-pushed-back-to-may-11/). 
 
 ```{r}
 
 #get the world map data
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
+#plot africa with a cutout of the next map
 plot1 <- ggplot(data = world) + 
   geom_sf() +
   coord_sf(xlim = c(-20,50), ylim = c(-40, 30), expand = FALSE)+
@@ -77,6 +79,7 @@ plot1 <- ggplot(data = world) +
 
 #plot1 <- ggplotly(plot1)
 
+#map with capetown circled
 plot2 <- ggplot(data = world) +
   geom_sf() +
   annotation_scale(location = "bl", width_hint = 0.5, unit_category = "imperial") +
@@ -108,7 +111,7 @@ plot2 #%>%
 
 ##Fresh vs Salt Water
 
-The biggest irony about the Cape Town water crisis is that the city is surrounded by water (see map above).However, it is surrounded by salty, ocean water, which is totally unusable for most of our needs. When I said earlier that the vast majority of the earth was covered in water, I didn't think about that fact that most of water is in the ocean. If we were cats this would be much less of an issue, this is because cat's kidneys are efficient enough that they can drink salt water for short periods of time and hydrate from it [Base Paws](https://www.basepaws.com/blog/top-10-random-facts-about-cats/). 
+The biggest irony about the Cape Town water crisis is that the city is surrounded by water (see map above).However, it is surrounded by salty, ocean water, which is totally unusable for most of our needs. When I said earlier that the vast majority of the earth was covered in water, I didn't think about the fact that most of water is in the ocean. If we were cats this would be much less of an issue, this is because cat's kidneys are efficient enough that they can drink salt water for short periods of time and hydrate from it [(Base Paws)](https://www.basepaws.com/blog/top-10-random-facts-about-cats/). 
 
 According to the [USGS](https://www.usgs.gov/special-topic/water-science-school/science/where-earths-water?qt-science_center_objects=0#qt-science_center_objects), fresh water only accounts for 2.5% of all water on the earth. Of the fresh water we do have, about 68% is frozen in glaciers and ice caps, 30.1% is underground, and only 1.2% can be found on the earths surface. The easily usable water falls into the following categories:
 
@@ -117,20 +120,35 @@ According to the [USGS](https://www.usgs.gov/special-topic/water-science-school/
 * Swamps, marshes
 * Rivers
 * Atmosphere
-* Living things
+* Living things (Humans included!)
 
-Therefore, the non-frozen, surface, fresh water accounts for 1.01% of all water on the planet. 
+We get most of our fresh water from rivers and lakes, which only account for 22,339 cubic miles of the 332.5 million cubic miles of water on the planet (.006%). To put this into perspective, the largest volanic eruption (Young Toba Tuff) had a volumne of 671 cubic miles, so the amount of earth and lava produced by that 1 volcanic eruption equals about 3% of the total volume of fresh water. To understand this volume another way, lets go back to the shower example. My friend Chris likes to take 45 minute showers, if all 7.7 billion people in the world took 45 minute showers everyday for a year we would use about 1.29% of this water annually. The average person lives 72 years, so if we all showered like Chris during our collective life times we would use 92.7% of all the fresh water in our rivers and lakes.
 
+##Water use in Agriculture
 
+Therefore, we should all blame Chris for our water problems right? Well, not quite. Worldwide, only 12% of water is used for domestic/house hold purposes[(FAO)](http://www.fao.org/aquastat/en/overview/methodology/water-use). Industrial uses account for 19% of all water used, and agriculture uses the majority at 69% of all water used. That is a huge portion of our water use! This is why in Cape Town the farmers reduction made such a big difference. Chris, you are off the hook for this one, sorry about that dude. 
 
-Fortunately, through several measures Capetonians were able to redirect water and reduce their use enough to push back Day Zero into the rainy season. When the rains could refill the reservoir and they were able to postpone Day Zero indefinitely. One measure taken was every person was capped at 23 gallons per day, which is about 9min and 12 seconds of shower time per person. Businesses also helped with the effort, restaurants put up "if its yellow let it mellow" signs, and offices had "dirty shirt" challenges to see who could wear the same shirt the longest without washing [(Alexander, 2019)](https://www.citylab.com/environment/2019/04/cape-town-water-conservation-south-africa-drought/587011/). However, one single change by the largest consumers of water was able to reduce water usage by 15%. Farmers agreed to half the water they were using from 30% of all water down to 15% [(Mail and Guardian, 2018)](https://mg.co.za/article/2018-02-05-day-zero-pushed-back-to-may-11/). 
+Across the world, it was estimated by [FA0 (2016)](https://www.globalagriculture.org/fileadmin/files/weltagrarbericht/Weltagrarbericht/13Wasser/2016WorldData-Withdrawal_eng.pdf) that agriculture used about 664 cubic miles, which is slightly less than that Young Toba Tuff eruption. Side note, I might need to do a whole post on that volcanic eruption in the future because I can't get it out of my head. By 2050, agriculture is expected to use 2042 cubic miles of water a year due to the increase in population and changes in food habits [(UNESCO, 2012)](http://www.unesco.org/new/fileadmin/MULTIMEDIA/HQ/SC/pdf/WWDR4%20Volume%201-Managing%20Water%20under%20Uncertainty%20and%20Risk.pdf). That would account for 9.14% of all the fresh water in our rivers and lakes every year. 
 
-#Water Use in Agriculture
+Before I go much further, I just want to make it clear that I support agriculture and farmers, without them we would not have food and that is just as important as water. We could blame farmers, but they are just reacting to the demands of consumers. As long as people want to pay for certain foods, there will be someone willing to produce it for money. I am also not saying you as a consumer should never eat certain foods. However, I will ask you to be open minded about how certain foods do use more or less water, and keep that in mind when deciding what you eat. Small changes made by plenty of people can make big differences. To put it another way, I am not going to ask all the Chris's out there to take 2 min and 38 second showers everyday, but if they all took 20 minute showers 1-2 days a week that could make a difference. 
 
-
+#Water use for Different Foods
 
 ```{r}
 
-
+#need to click on the data in github, right click "view raw", and then click "Copy link address" for this to work
+plant.data <- read.xlsx("https://github.com/sanchomw/blog-data/blob/master/Water_Use_Crops.xlsx?raw=true")
+animal.data <- read.xlsx("https://github.com/sanchomw/blog-data/blob/master/Water_Use_Animals.xlsx?raw=true")
 
 ```
+
+##Fun Numbers (outliers)
+
+##Water use for Plants
+
+##Water use for Animals
+
+
+
+
+
