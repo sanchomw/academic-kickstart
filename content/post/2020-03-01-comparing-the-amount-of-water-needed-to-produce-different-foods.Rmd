@@ -47,6 +47,7 @@ library(plotly)
 library(widgetframe)
 library(httr)
 library(openxlsx)
+library(scales)
 
 ```
 #How 15,415 Got in my Head
@@ -217,14 +218,18 @@ animal.data <- read.xlsx("https://github.com/sanchomw/blog-data/blob/master/Wate
 animal.data <- animal.data %>%
   fill(`HS.(PC-TAS).code`:Weighted.average)
 plant.data <- plant.data %>%
-  fill(`Product.code.(FAOSTAT)`:Global.average)
+  fill(`Product.code.(FAOSTAT)`:Global.average) 
 
-#long to wide
+#long to wide, remove unecessary rows, get total water
 animal.data <- animal.data %>%
   select(-c(Grazing:Industrial)) %>%
-  spread(., Water.Food.Print, Weighted.average)
+  spread(., Water.Food.Print, Weighted.average)%>%
+  mutate(`Total Water` = Blue+Green+Grey) %>%
+  select(`Description (short)` = `Product.description.(SITC)`, `Description (long)` = `Product.discription.(HS)`, Blue, Green, Grey, `Total Water`)
 plant.data <- plant.data %>%
-  spread(. ,Water.Footprint, Global.average)
+  spread(. ,Water.Footprint, Global.average) %>%
+  mutate(`Total Water` = Blue+Green+Grey)  %>%
+  select(`Description (short)` = `Product.description.(FAOSTAT)`, `Description (long)` = `Product.description.(HS)`, Blue, Green, Grey, `Total Water`)
 
 ```
 
@@ -277,14 +282,194 @@ plot4
 
 ```
 
-##Fun Numbers (outliers)
-
+For the remained of these analyses, I will be using the raw water data as Mekonnen & Hoekstra did not provide calorie data for all the products (only a handful). However, please keep in mind that calories would change these numbers quite a bit. In the future, I hope to do a follow up post that takes the calorie data into account. 
 
 ##Water use for Plants
 
+First, lets take a look at the plant products that use the least amount of water. A quick note, if you click on the legend you can remove that data point (including the text total). If you double click on a data point in the legend you can isolate that single data point. That way you can see the grey, green, or blue water footprint for each product. As always hovering will give you the specific numbers underlying that data point.
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- plant.data %>%
+  arrange(`Total Water`) %>%
+  filter(`Total Water` < 215) %>%
+  mutate(Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+As you can see, sugar beets require the least amount of water out of any plant product (or animal product of that matter). I think we should take this to mean that Dwight Schrute was actually a secret environmentalist. 
+
+On the other side of the spectrum here are the plant products that required the most water. This is one graph where being able to isolate a data point (grey water in this case) by double clicking the legend is extremely useful. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- plant.data %>%
+  arrange(`Total Water`) %>%
+  filter(`Total Water` > 24300) %>%
+  mutate(Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+Vanilla beans required the most water of any plant, this is likely due to their light weight and their extremely long grow time (multiple years). The other water intensive plants were either spices or fats. 
+
+The next few categories I am going to visualize are: Fruits, Veggies, Drinks, and Carbs. For each category I am going to pick out the most popular products from each category. If you want to see a break down for every product in the database skip down to the last section. There are 355 products in the plant data, so I can't show everything in there. First, let me visualize some of the most popular fruits.
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- plant.data %>%
+  filter(`Description (long)` %in% c("Bananas", "Apples, fresh", "Strawberries, fresh", "Grapes, fresh", "Oranges, fresh or dried")) %>%
+  arrange(`Total Water`) %>%
+  mutate(Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+I found it surprising that apple was the "worst" of this group, using the most total,  blue,  and grey water. I did like that all of these fruits get the majority of their water from green sources, which is the most sustainable source. Strawberries are my favorite, so this just gives me an excuse to eat more strawberries. Next, lets take a look at veggies. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- plant.data %>%
+  filter(`Description (long)` %in% c("Potatoes, fresh or chilled nes","Tomatoes, fresh or chilled","Onions and shallots, fresh or chilled","Carrots and turnips, fresh or chilled","Cauliflowers and headed broccoli, fresh or chilled")) %>%
+  arrange(`Total Water`) %>%
+  mutate(Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+All the vegetables in this group used less water than the fruit group, overall this trend holds with veggies using less water than fruit. However, both groups do get a majority of their water from green sources. Looking at the other water sources, tomatoes actually used the most blue water, while cauliflower used the most grey water. If you have read this far thank you, and feel free to grab a drink for this next section. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- plant.data %>%
+  filter(`Description (long)` %in% c("Beer made from malt","Grape wines nes,incl fort&grape must,unfermntd by add alc,in ctnr > 2l","Coffee, roasted, not decaffeinated","Tea")) %>%
+  arrange(`Total Water`) %>%
+  mutate(Label = comma(`Total Water`, accuracy = 1))
+
+#shorten label
+temp.df[2,2] <- "Grape Wines"
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+If you grabbed alcohol then you made an enviormentally friendly decision. However, this isn't quite a fair comparison as 1kg of coffee beans/ tea leaves makes far more
+than 1kg of coffee and tea. For reference, 1kg of beer is 33oz which is slighly less than 3 cans, or is about 1.3 bottles of wine. It is still surprising that tea and coffee require so much water to produce. For this graph, I recommending hovering over the graph and clicking the option that says "compare data on hover" (2nd from the right). That way you can see the beer/wine breakdown with having to zoom in. A quick note, I have kept the original names from the dataset the same on my graphs, but I did shorten the graph wine label from "Grape wines nes,incl fort&grape must,unfermntd by add alc,in ctnr > 2l". The final plant category I am going to look at is carb or grains. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- plant.data %>%
+  filter(`Description (long)` %in% c("Maize (corn)","Rice, husked (brown)","Wheat (Durum wheat, Wheat nes and meslin)","Germ of cereals, whole, rolled, flaked or ground")) %>%
+  arrange(`Total Water`) %>%
+  mutate(Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+Carbs are really light in weight so it is not surprising that they require quite a bit of water to produce 1kg, but I was surprised that there were such large differences within this group. What is interesting to note is although cereals require the most total water, they actually use the least water if you remove green water so they are arguably the most sustainable. The difference is not small either, they use around 100liters, which the rest use between 250 and 700 liters of grey and blue water. 
+
 ##Water use for Animals
 
-#
+A quick note, I am using the product names as they appear in the dataset, but will point out if I shorten anything. I am doing this so its easily searchable in the bottom section, and so that I can stay true to the source data. Here are some words they use that are not as common: 
+
+* Bovine = Cow
+* Swine = Pig
+* Offal = Internal organs (don't look it up, its a catch all category)
+
+I am going to start the animals the same way as the vegetables, with the 5 products in the data that use the least amount of water first.
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- animal.data %>%
+  arrange(`Total Water`) %>%
+  filter(`Total Water` < 1160) %>%
+  mutate(#`Description (long)` = gsub('(?s)(?=(?:.{25})+$)', "<br>", `Description (long)`, perl = TRUE),
+    `Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+    Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+
+
+#All Numbers
 
 
 
