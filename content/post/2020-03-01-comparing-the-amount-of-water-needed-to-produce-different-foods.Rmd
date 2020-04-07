@@ -48,6 +48,18 @@ library(widgetframe)
 library(httr)
 library(openxlsx)
 library(scales)
+library(DT)
+
+
+#helper functions#
+create_dt <- function(x){
+  DT::datatable(x,
+                extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+}
 
 ```
 #How 15,415 Got in my Head
@@ -294,7 +306,8 @@ First, lets take a look at the plant products that use the least amount of water
 temp.df <- plant.data %>%
   arrange(`Total Water`) %>%
   filter(`Total Water` < 215) %>%
-  mutate(Label = comma(`Total Water`, accuracy = 1))
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
 
 #factor to save order when plotting 
 temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
@@ -319,7 +332,8 @@ On the other side of the spectrum here are the plant products that required the 
 temp.df <- plant.data %>%
   arrange(`Total Water`) %>%
   filter(`Total Water` > 24300) %>%
-  mutate(Label = comma(`Total Water`, accuracy = 1))
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
 
 #factor to save order when plotting 
 temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
@@ -344,7 +358,8 @@ The next few categories I am going to visualize are: Fruits, Veggies, Drinks, an
 temp.df <- plant.data %>%
   filter(`Description (long)` %in% c("Bananas", "Apples, fresh", "Strawberries, fresh", "Grapes, fresh", "Oranges, fresh or dried")) %>%
   arrange(`Total Water`) %>%
-  mutate(Label = comma(`Total Water`, accuracy = 1))
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
 
 #factor to save order when plotting 
 temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
@@ -367,7 +382,8 @@ I found it surprising that apple was the "worst" of this group, using the most t
 temp.df <- plant.data %>%
   filter(`Description (long)` %in% c("Potatoes, fresh or chilled nes","Tomatoes, fresh or chilled","Onions and shallots, fresh or chilled","Carrots and turnips, fresh or chilled","Cauliflowers and headed broccoli, fresh or chilled")) %>%
   arrange(`Total Water`) %>%
-  mutate(Label = comma(`Total Water`, accuracy = 1))
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
 
 #factor to save order when plotting 
 temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
@@ -390,7 +406,8 @@ All the vegetables in this group used less water than the fruit group, overall t
 temp.df <- plant.data %>%
   filter(`Description (long)` %in% c("Beer made from malt","Grape wines nes,incl fort&grape must,unfermntd by add alc,in ctnr > 2l","Coffee, roasted, not decaffeinated","Tea")) %>%
   arrange(`Total Water`) %>%
-  mutate(Label = comma(`Total Water`, accuracy = 1))
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
 
 #shorten label
 temp.df[2,2] <- "Grape Wines"
@@ -417,7 +434,8 @@ than 1kg of coffee and tea. For reference, 1kg of beer is 33oz which is slighly 
 temp.df <- plant.data %>%
   filter(`Description (long)` %in% c("Maize (corn)","Rice, husked (brown)","Wheat (Durum wheat, Wheat nes and meslin)","Germ of cereals, whole, rolled, flaked or ground")) %>%
   arrange(`Total Water`) %>%
-  mutate(Label = comma(`Total Water`, accuracy = 1))
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
 
 #factor to save order when plotting 
 temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
@@ -450,8 +468,7 @@ I am going to start the animals the same way as the vegetables, with the 5 produ
 temp.df <- animal.data %>%
   arrange(`Total Water`) %>%
   filter(`Total Water` < 1160) %>%
-  mutate(#`Description (long)` = gsub('(?s)(?=(?:.{25})+$)', "<br>", `Description (long)`, perl = TRUE),
-    `Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
     Label = comma(`Total Water`, accuracy = 1))
 
 #factor to save order when plotting 
@@ -467,10 +484,166 @@ plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue
 
 ```
 
+Milk products dominate the bottom of the animal products, along with baby chickens and pig offal. The bottom 5 plant products are all less than the lowest animal product. One of the main reasons for this is many animals are fed plant products, which gets counted into their water footprint. There are actually 22 plant products that have smaller total water footprints than the smallest animal water footprint. What surprised me is the majority of water sources on this list is atrributed to green sources. 
 
+Next lets look at the top 6 animal products as found in the dataset. I had to pick the top 6 becuase of a tie. Also, I did think about editing this list of outliers, but I wanted to stay true to the source data. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- animal.data %>%
+  arrange(`Total Water`) %>%
+  filter(`Total Water` > 40000) %>%
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+    Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+I think my desire to remove an outlier makes more sense now, and I am not just talking about the visual aspect. Once again, I highly recommend hovering over the graph and clicking the "Compare data on hover" button to make the data more visible. This list is dominated by mainly horse products and 1 non-food cow product. In the US, horses are not typically consumed and were actually illegal from 2006-2011, so from an environmental perspective most people aren't consuming the most water intensive meats. 
+
+The animal products don't fall into as clean categories as the plants, so I had to get a little creative picking them: 
+
+* Fresh Meat (Whole Animal)
+* Beef (fresh/frozen, bone-in/boneless)
+* Common Animal Products
+* Leather
+
+Once again, the full dataset is at the bottom of this post if you want to see all 106 animal products. Lets start with the different whole, animals. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- animal.data %>%
+  filter(`Description (long)` %in% c("Turkey meat and meat offal prepared or preserved, excluding livers", "Dom fowl,duck,goose&guinea fowl meat&meat offal prep/presvd exc livers", "Bovine carcasses and half carcasses, fresh or chilled", "Sheep carcasses and half carcasses, fresh or chilled", "Lamb carcasses and half carcasses, fresh or chilled", "Swine carcasses and half carcasses, fresh or chilled")) %>%
+  arrange(`Total Water`) %>%
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+I found it really interesting that generally speaking, the more lean the meat the smaller the water footprint. It would be interesting to see if that holds up when nutrition and macros are factored in. I was also once again surprised that the vast majority of the water souce is green. If you take out the green (by clicking the legend), the trend totally changes. The bottom three products (turkey, chicken/duck/goose, and pigs) by total actually use the most grey and blue water souces. This really shows that there is far more nuance in how environmentally friendly certain products are, and this is just taking water into account. 
+
+The follow graph looks a little deeper into beef. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- animal.data %>%
+  filter(`Description (long)` %in% c("Bovine cuts boneless, fresh or chilled", "Bovine cuts bone in, fresh or chilled",
+                                     "Bovine cuts bone in, frozen", "Bovine cuts boneless, frozen", "Bovine carcasses and half carcasses, fresh or chilled")) %>%
+  arrange(`Total Water`) %>%
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+This graph seems a little boring, but it actually shows a few interesting points. The first point is getting cuts versus the whole cow requires no more additional water if the meat is fresh. The second point is fresh meats require 30% less water than frozen meats (at least with beef). The third point brings this whole post full circle, whoever decided to put 15,415 liters everywhere did not mention anywhere that it was **FROZEN** beef only. If they were going to compare it to **FRESH** tomatoes they should have gotten the water footprint of **FRESH** beef. 
+
+This would further make my point that beef does not use 47.8x more water than tomatoes, and probably less than the 7.6x I cited earlier with calories. This also shows the importance of finding the original source of your data! As I said earlier, you can find the 15,415 number everywhere and many of those times it doesn't even point back to the original source. It cites someone else who used the number. By doing this, you remove all context such as knowing that it only applies to frozen beef, or that the original authors thought nutrition was an important factor to consider. 
+
+Moving on, lets take a look at some other common animal products, including one of my favorites Cheese! A quick note, I did lump the following cheese categories into "Processed Cheese" because they use the same amount of water:
+
+* Cheese processed, not grated or powdered
+* Cheese, grated or powdered, of all kinds
+* Cheese, blue-veined
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- animal.data %>%
+  filter(`Description (long)` %in% c("Eggs, bird, in shell, fresh, preserved or cooked", "Cheese, fresh (including whey cheese) unfermented, and curd", "Cheese processed, not grated or powdered", "Milk not concentrated and unsweetened not exceeding 1% fat", "Milk not concentrated & unsweetened exceeding 1% not exceeding 6% fat", "Yogurt concentratd o not,sweetend o not,flavourd o contg fruit o cocoa", "Butter", "Bellies, streaky and cuts thereof, swine cured")) %>%
+  mutate(`Description (long)` = gsub("Cheese processed, not grated or powdered", "Processed Cheese", `Description (long)`)) %>%
+  arrange(`Total Water`) %>%
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+Most of the products are milk or made from milk. I didn't realize whole milk requires slightly more water than skim. It also made sense that yogurt required much less water than fresh cheese, and processed cheese require more water than fresh. I didn't expect eggs to be so high on this list, but they required much more water than milk. Finally, butter required the most water of any milk product. I added the final product because "cured swine bellies" is really round about way of saying Bacon! I mostly just added that becuase its also one of my favorite foods. Bacon does require more water than regular pork to produce. 
+
+The final animal section I want to explore is a non-food animal product, leather. 
+
+```{r}
+
+#pull out bottom 5, get label for plotting
+temp.df <- animal.data %>%
+  filter(`Description (long)` %in% c("Bovine and equine leather, tanned or retanned, nes", "Sheep or lamb skin leather, tanned or retanned, nes", "Goat or kid skin leather, tanned or retanned, nes")) %>%
+  arrange(`Total Water`) %>%
+  mutate(`Description (long)` = gsub('(.{1,30})(\\s|$)', "\\1<br>", `Description (long)`),
+         Label = comma(`Total Water`, accuracy = 1))
+
+#factor to save order when plotting 
+temp.df$`Description (long)` <- factor(temp.df$`Description (long)`, level = c(as.character(temp.df$`Description (long)`)))
+
+plot_ly(temp.df, x = ~`Description (long)`, y =~Blue, type = "bar", name = "Blue", marker = list(color = "blue")) %>%
+  add_trace(y = ~Green, name = "Green", marker = list(color = "green")) %>%
+  add_trace(y = ~Grey, name = "Grey", marker = list(color = "grey")) %>%
+  add_text(y = ~`Total Water`, text = ~`Label`, hoverinfo = "none", textposition = "top center", name = "Total Water Footprint", marker = NULL) %>%
+  layout(barmode = "stack",
+         yaxis = list(title = "Water (Liters)"),
+         xaxis = list(title = "Product"))
+
+```
+
+I am not a huge leather person, but I thought this was worth sharing. I don't imagine there is much overlap between people who wear leather and people who care about water footprints, but if you are one of those people you are in luck today! I would recommend getting sheep, lamb, or goat leather over cow leather as there is a huge difference in water usage. 
 
 #All Numbers
 
+Thank you for reading down this far! This post ended up being longer than expected. As promised above, here are the explorable, full datasets. The data is sortable by column (just click on the column name), or you can just type words into the search bar to find specific products. 
+
+##Plant Data
+```{r}
+create_dt(plant.data)
+```
+
+##Animal Data
+```{r}
+create_dt(animal.data)
+```
 
 
 
