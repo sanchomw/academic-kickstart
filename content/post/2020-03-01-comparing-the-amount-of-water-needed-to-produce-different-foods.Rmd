@@ -675,11 +675,13 @@ I’m not a huge leather person, but I thought this was worth sharing. I don’t
 Thank you for reading down this far! I admit that this post ended up being longer than I had expected, but there were a lot of data to explore on this topic, and these were only some of the products included in the research by Mekonnen & Hoekstra. As such (and as promised above), here are the explorable, full datasets. The data is sortable by column (just click on the column name), or you can just type words into the search bar to find specific products. 
 
 ##Plant Data
+
 ```{r}
 create_dt(plant.data)
 ```
 
 ##Animal Data
+
 ```{r}
 create_dt(animal.data)
 ```
